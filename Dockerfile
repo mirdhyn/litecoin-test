@@ -26,7 +26,7 @@ RUN tar xzvf litecoin-${LITECOIN_VERSION}-${LITECOIN_ARCH}-linux-gnu.tar.gz
 RUN wget https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TINI_ARCH}
 RUN wget https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TINI_ARCH}.asc
 RUN gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7
-RUN gpg tini-${TINI_ARCH}.asc
+RUN gpg --verify tini-${TINI_ARCH}.asc
 RUN chmod +x tini-${TINI_ARCH}
 
 
@@ -35,7 +35,7 @@ FROM ubuntu:21.10
 ARG LITECOIN_VERSION
 ARG LITECOIN_ARCH
 ARG TINI_ARCH
-COPY --from=0 /tmp/litecoin-${LITECOIN_VERSION} /usr/local/
+COPY --from=0 /tmp/litecoin-${LITECOIN_VERSION}/bin/litecoind /usr/local/bin/litecoind
 COPY --from=0 /tmp/tini-${TINI_ARCH} /usr/local/bin/tini
 RUN mkdir /.litecoin && chown 1000 /.litecoin
 
