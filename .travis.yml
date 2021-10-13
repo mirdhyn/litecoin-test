@@ -13,6 +13,7 @@ install:
 - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 # install kubectl
 - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+- chmod +x kubectl
 # get kubeconfig from travis secret
 - mkdir .kube
 - echo ${KUBECONFIG} | base64 -d > .kube/config
