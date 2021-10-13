@@ -1,5 +1,3 @@
-sudo: required
-
 branches:
   only:
   - main
@@ -7,20 +5,20 @@ branches:
 services:
 - docker
 
-install:
-- sudo sh -c "curl -sSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash" # install latest k3d version
-- echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+#install:
+#- sudo sh -c "curl -sSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash" # install latest k3d version
+#- echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
 script:
 - docker build -t mirdhyn/litecoin:${TRAVIS_COMMIT} .
 - docker push mirdhyn/litecoin:${TRAVIS_COMMIT}
 
-- sudo k3d cluster create test --kubeconfig-update-default --kubeconfig-switch-context --wait
-- sudo k3d cluster list
-- sudo k3d node list
-- sudo kubectl apply -f deploy/statefulset.yaml -n default
-- sudo kubectl get sts -n default
-- sudo kubectl get po -lapp=litecoin
-- sleep 15
-- sudo kubectl logs -lapp=litecoin
-- sudo k3d cluster delete test
+#- sudo k3d cluster create test --kubeconfig-update-default --kubeconfig-switch-context --wait
+#- sudo k3d cluster list
+#- sudo k3d node list
+#- sudo kubectl apply -f deploy/statefulset.yaml -n default
+#- sudo kubectl get sts -n default
+#- sudo kubectl get po -lapp=litecoin
+#- sleep 15
+#- sudo kubectl logs -lapp=litecoin
+#- sudo k3d cluster delete test
