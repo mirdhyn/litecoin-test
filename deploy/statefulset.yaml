@@ -15,14 +15,14 @@ spec:
     spec:
       containers:
       - name: litecoin
-        image: mirdhyn/litecoin:0.18.1
+        image: litecoin
         volumeMounts:
         - name: data
           mountPath: /.litecoin
         resources:
           limits:
             cpu: 1
-            memory: 100Mi
+            memory: 1Gi
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -30,4 +30,4 @@ spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
-          storage: 10Gi # for testing only
+          storage: 80Gi
