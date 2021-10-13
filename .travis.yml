@@ -18,9 +18,7 @@ script:
 - docker build -t mirdhyn/litecoin:${TRAVIS_COMMIT} .
 - docker push mirdhyn/litecoin:${TRAVIS_COMMIT}
 
-- k3d create
-- sleep 15
-- export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
+- k3d cluster create mycluster --kubeconfig-update-default --kubeconfig-switch-context --wait
 - kubectl get node
 - kubectl apply -f deploy/statefulset.yaml -n default
 - kubectl get sts -n default
