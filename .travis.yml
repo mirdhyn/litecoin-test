@@ -16,7 +16,7 @@ install:
 - chmod +x kubectl
 # get kubeconfig from travis secret
 - mkdir .kube
-- echo ${KUBECONFIG} | base64 -d > .kube/config
+- echo ${kubeconfig} | base64 -d > .kube/config
 
 script:
 # building & pushing image to dockerhub
