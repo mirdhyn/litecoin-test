@@ -1,0 +1,28 @@
+branches:
+  only:
+  - main
+
+services:
+- docker
+
+before_install:
+- wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
+- wget https://github.com/rancher/k3d/releases/download/v5.0.1/k3d-linux-amd64
+- chmod +x k3d-linux-amd64 kubectl
+- sudo mv k3d-linux-amd64 /usr/local/bin/k3d
+- sudo mv kubectl /usr/local/bin
+- k3d --version
+
+script:
+- echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+- docker build -t mirdhyn/litecoin:${TRAVIS_COMMIT} .
+- docker push mirdhyn/litecoin:${TRAVIS_COMMIT}
+
+- k3d create
+- sleep 15
+- export KUBECONFIG="$(k3d get-kubeconfig --name='k3s-default')"
+- kubectl get node
+- kubectl apply -f deploy/statefulset.yaml -n default
+- kubectl get sts -n default
+- kubectl get po -lapp=litecoin
+
