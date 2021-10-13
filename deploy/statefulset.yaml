@@ -13,6 +13,13 @@ spec:
       labels:
         app: litecoin
     spec:
+      initContainers:
+       - name: chown-volume
+         image: busybox
+         command: ["sh", "-c", "chown -R 1000:1000 /data"]
+         volumeMounts:
+         - name: data
+           mountPath: /data
       containers:
       - name: litecoin
         image: litecoin
@@ -21,8 +28,12 @@ spec:
           mountPath: /.litecoin
         resources:
           limits:
-            cpu: 1
-            memory: 1Gi
+            cpu: 500m
+            memory: 500Mi
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
   volumeClaimTemplates:
   - metadata:
       name: data
