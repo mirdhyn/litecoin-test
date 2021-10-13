@@ -29,6 +29,6 @@ script:
 - ./kubectl apply -k deploy
 # check that app is running 
 - ./kubectl get po -lapp=litecoin
-- sleep 15
+- sleep 60
 - ./kubectl logs -lapp=litecoin
 
