@@ -1,3 +1,5 @@
+sudo: required
+
 branches:
   only:
   - main
@@ -5,22 +7,20 @@ branches:
 services:
 - docker
 
-before_install:
-- wget https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
-- wget https://github.com/rancher/k3d/releases/download/v5.0.1/k3d-linux-amd64
-- chmod +x k3d-linux-amd64 kubectl
-- sudo mv k3d-linux-amd64 /usr/local/bin/k3d
-- sudo mv kubectl /usr/local/bin
-- k3d --version
+install:
+- sudo sh -c "curl -sSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash" # install latest k3d version
+- echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 
 script:
-- echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 - docker build -t mirdhyn/litecoin:${TRAVIS_COMMIT} .
 - docker push mirdhyn/litecoin:${TRAVIS_COMMIT}
 
-- k3d cluster create mycluster --kubeconfig-update-default --kubeconfig-switch-context --wait
-- kubectl get node
-- kubectl apply -f deploy/statefulset.yaml -n default
-- kubectl get sts -n default
-- kubectl get po -lapp=litecoin
-
+- sudo k3d cluster create test --kubeconfig-update-default --kubeconfig-switch-context --wait
+- sudo k3d cluster list
+- sudo k3d node list
+- sudo kubectl apply -f deploy/statefulset.yaml -n default
+- sudo kubectl get sts -n default
+- sudo kubectl get po -lapp=litecoin
+- sleep 15
+- sudo kubectl logs -lapp=litecoin
+- sudo k3d cluster delete test
