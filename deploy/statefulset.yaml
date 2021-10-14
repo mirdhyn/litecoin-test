@@ -28,8 +28,8 @@ spec:
           mountPath: /.litecoin
         resources:
           limits:
-            cpu: 500m
-            memory: 500Mi
+            cpu: 100m     # this is a small cluster, I would also need to spend
+            memory: 100Mi # more time to actually monitor avg usage to set proper req/limits
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
