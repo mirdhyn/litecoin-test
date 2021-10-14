@@ -1,2 +1,3 @@
 # Litecoin test build repo
-This is a test repository, building litecoin docker image and running it in k3s inside Travis CI
+This is a test repository, simply building litecoin docker image and running K8s cluster
+using TravisCI & Kustomize
