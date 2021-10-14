@@ -26,6 +26,8 @@ script:
 # note: yes, I know... there's much simplier/better way to do that, but I needed to use some text manipulation here
 - git log| grep commit| head -1| awk '{print $2}'| xargs -I{} sed -i 's/latest/{}/' deploy/kustomization.yaml
 # deploy to cluster
+# in real world I'd rather use tool like ArgoCD or flux
+# than to deploy directly into the cluster
 - ./kubectl apply -k deploy
 # check that app is running 
 - ./kubectl get po -lapp=litecoin
